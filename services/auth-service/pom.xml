@@ -14,7 +14,6 @@
     <artifactId>auth-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>auth-service</name>
-    <packaging>pom</packaging>
     <description>auth-service</description>
 
     <url/>

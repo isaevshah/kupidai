@@ -13,7 +13,6 @@
     <artifactId>api-gateway</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>api-gateway</name>
-    <packaging>pom</packaging>
     <description>api-gateway</description>
 
     <url/>

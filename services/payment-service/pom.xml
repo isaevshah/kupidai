@@ -13,7 +13,6 @@
     <artifactId>payment-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>payment-service</name>
-    <packaging>pom</packaging>
     <description>payment-service</description>
 
     <url/>

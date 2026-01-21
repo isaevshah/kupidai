@@ -13,7 +13,6 @@
     <artifactId>common-dto</artifactId>
     <version>1.0</version>
     <name>common-dto</name>
-    <packaging>pom</packaging>
     <description>common-dto</description>
 
     <url/>

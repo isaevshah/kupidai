@@ -13,7 +13,6 @@
     <artifactId>notifications-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>notifications-service</name>
-    <packaging>pom</packaging>
     <description>notifications-service</description>
 
     <url/>

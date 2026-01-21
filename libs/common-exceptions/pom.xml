@@ -13,7 +13,6 @@
     <artifactId>common-exceptions</artifactId>
     <version>1.0</version>
     <name>common-exceptions</name>
-    <packaging>pom</packaging>
     <description>common-exceptions</description>
 
     <url/>
