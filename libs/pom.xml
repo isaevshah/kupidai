@@ -16,6 +16,11 @@
     <packaging>pom</packaging>
     <description>libs</description>
 
+    <modules>
+        <module>common-dto</module>
+        <module>common-exceptions</module>
+    </modules>
+
     <url/>
     <licenses>
         <license/>
