@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  # Service Discovery - Consul
+  consul:
+    image: consul:1.15
+    ports:
+      - "8500:8500"
+    command: agent -server -bootstrap -ui -client=0.0.0.0
+
+  # Базы данных
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: kupidai
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  # Для будущего использования
+  mongodb:
+    image: mongo:6
+    ports:
+      - "27017:27017"
