@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: common-exceptions
+server:
+  port: 8086
