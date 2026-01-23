@@ -1,19 +1,52 @@
+server:
+  port: 8080
+
 spring:
-  security:
-    enabked: fakse
   application:
     name: api-gateway
+  security:
+    user:
+      name: admin
+      password: admin1234
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: admin-service
+          uri: lb://admin-service
+          predicates:
+            - Path=/api/admin/**
+
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/auth/**
+
+        - id: payment-service
+          uri: lb://payment-service
+          predicates:
+            - Path=/api/payment/**
+
+        - id: notification-service
+          uri: lb://notification-service
+          predicates:
+            - Path=/api/notification/**
+
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        health-check-path: /actuator/health
+
 management:
   endpoints:
     web:
       exposure:
-        include: "*"
-      base-path: /actuator
+        include: health,info
   endpoint:
     health:
       show-details: always
-    shutdown:
-      enabled: true
-
-server:
-  port: 8080
