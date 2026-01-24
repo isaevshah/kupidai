@@ -1,29 +1,93 @@
 version: '3.8'
 services:
-  # Service Discovery - Consul
+  # Инфраструктура
   consul:
     image: consul:1.15
-    ports:
-      - "8500:8500"
+    ports: ["8500:8500"]
     command: agent -server -bootstrap -ui -client=0.0.0.0
 
-  # Базы данных
   postgres:
     image: postgres:15-alpine
     environment:
       POSTGRES_DB: kupidai
       POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-    ports:
-      - "5432:5432"
+      POSTGRES_PASSWORD: admin123
+    ports: ["5432:5432"]
+    volumes: [postgres_data:/var/lib/postgresql/data]
 
   redis:
     image: redis:7-alpine
-    ports:
-      - "6379:6379"
+    ports: ["6379:6379"]
 
-  # Для будущего использования
-  mongodb:
-    image: mongo:6
-    ports:
-      - "27017:27017"
+  # Микросервисы с ENV переменными
+
+  admin-service:
+    build: ../services/admin-service
+    container_name: admin-service
+    ports: ["8081:8080"]
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_APPLICATION_NAME=admin-service
+      - DATABASE_URL=jdbc:postgresql://postgres:5432/kupidai
+      - DATABASE_USERNAME=admin
+      - DATABASE_PASSWORD=admin123
+      - CONSUL_HOST=consul
+      - CONSUL_PORT=8500
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on: [consul, postgres]
+    restart: unless-stopped
+
+  auth-service:
+    build: ../services/auth-service
+    container_name: auth-service
+    ports: ["8082:8080"]
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_APPLICATION_NAME=auth-service
+      - CONSUL_HOST=consul
+      - CONSUL_PORT=8500
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on: [consul]
+    restart: unless-stopped
+
+  api-gateway:
+    build: ../services/api-gateway
+    container_name: api-gateway
+    ports: ["8080:8080"]
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_APPLICATION_NAME=api-gateway
+      - CONSUL_HOST=consul
+      - CONSUL_PORT=8500
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on: [consul, admin-service, auth-service]
+    restart: unless-stopped
+
+  payment-service:
+    build: ../services/payment-service
+    container_name: payment-service
+    ports: ["8083:8080"]
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_APPLICATION_NAME=payment-service
+      - CONSUL_HOST=consul
+      - CONSUL_PORT=8500
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on: [consul]
+    restart: unless-stopped
+
+  notifications-service:
+    build: ../services/notifications-service
+    container_name: notifications-service
+    ports: ["8084:8080"]
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_APPLICATION_NAME=notifications-service
+      - CONSUL_HOST=consul
+      - CONSUL_PORT=8500
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on: [consul]
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

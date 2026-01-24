@@ -1,13 +1,10 @@
+# services/api-gateway/src/main/resources/application.yml
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
 
 spring:
   application:
-    name: api-gateway
-  security:
-    user:
-      name: admin
-      password: admin1234
+    name: ${SPRING_APPLICATION_NAME:api-gateway}
 
   cloud:
     gateway:
@@ -31,14 +28,14 @@ spring:
           predicates:
             - Path=/api/payment/**
 
-        - id: notification-service
-          uri: lb://notification-service
+        - id: notifications-service
+          uri: lb://notifications-service
           predicates:
             - Path=/api/notification/**
 
     consul:
-      host: localhost
-      port: 8500
+      host: ${CONSUL_HOST:consul}
+      port: ${CONSUL_PORT:8500}
       discovery:
         health-check-path: /actuator/health
 
